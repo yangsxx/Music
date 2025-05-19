@@ -1,0 +1,74 @@
+server:
+  port: 8090  # 应用服务端口
+
+
+spring:
+  datasource:
+    url: jdbc:postgresql://ip.yangsc.top:5432/swiftcache
+    username: postgres
+    password: 1999826
+    driver-class-name: org.postgresql.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      filters: stat,wall
+  data:
+    redis:
+      host: ip.yangsc.top
+      port: 6388
+      password:
+      database: 1
+  mvc:
+    servlet:
+      path: /
+    pathmatch:
+      matching-strategy: ant_path_matcher
+    static-path-pattern: /**
+  web:
+    resources:
+      static-locations: classpath:/static/
+  rabbitmq:
+    host: ip.yangsc.top
+    port: 5672
+    username: admin
+    password: admin123
+    virtual-host: /
+
+  info:
+    git:
+      location: classpath:git.properties
+
+mybatis-plus:
+  mapper-locations: classpath*:*/mapper/**/*.xml
+  # mapper-locations: classpath:*/mapper/**/*.xml
+  configuration:
+    #默认开启驼峰命名法，可以不用设置该属性
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  type-aliases-package: top.yangsc.base.pojo
+
+# 豆包：ep-20250208211342-pzmrf
+# deepseek-R1:ep-20250208153140-46hgm
+ark-ai:
+  api-key: 9eba2453-6068-4509-8a47-0f4c0170f868
+  model-id: ep-20250328102116-p2wtl
+
+logging:
+  level:
+    org.apache.ibatis: ERROR          # 关闭 MyBatis 日志
+    com.baomidou.mybatisplus: ERROR   # 关闭 MyBatis-Plus 日志
+    java.sql: ERROR                   # 关闭 JDBC 日志
+    org.postgresql: ERROR
+management:
+  info:
+    git:
+      mode: full
