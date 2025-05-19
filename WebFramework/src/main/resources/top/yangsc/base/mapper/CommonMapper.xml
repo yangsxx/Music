@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.yangsc.base.mapper.CommonMapper">
+
+    <select id="isExist" resultType="java.lang.Boolean">
+        select CASE  WHEN count(1) > 0
+        THEN true
+        ELSE false END
+        from #{TabName} where true
+        <if test="CName != null and CName != ''">
+            and #{CName} = #{data}
+        </if>
+        and used=1
+    </select>
+    <select id="getId" resultType="java.lang.Long">
+        select getId()
+    </select>
+
+
+</mapper>
