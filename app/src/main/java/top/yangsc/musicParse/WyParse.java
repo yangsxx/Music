@@ -39,6 +39,7 @@ public class WyParse {
             musicMeta.setPlatform(4);
             musicMeta.setPicUrl(images.getStr(0));
             musicMeta.setSongName(entries.getStr("title"));
+            musicMeta.setSongId(songId);
         }
         if (duration != null){
             String content = duration.attr("content");

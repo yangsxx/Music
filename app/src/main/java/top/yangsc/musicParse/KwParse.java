@@ -58,6 +58,7 @@ public class KwParse {
         musicMeta.setDescribe(entries.getStr("albuminfo"));
         musicMeta.setPicUrl(entries.getStr("pic120"));
         musicMeta.setPlatform(1);
+        musicMeta.setSongId(songId);
 
         return musicMeta;
     }

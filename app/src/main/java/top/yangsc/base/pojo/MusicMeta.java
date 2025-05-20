@@ -47,4 +47,7 @@ public class MusicMeta implements Serializable {
 
     @Schema(description = "专辑封面")
     private String picUrl;
+
+    @Schema(description = "歌曲id")
+    private String songId;
 }

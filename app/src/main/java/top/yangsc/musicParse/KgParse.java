@@ -50,6 +50,7 @@ public class KgParse {
                     .replace(" - ","").trim());
             musicMeta.setPlatform(2);
             musicMeta.setDescribe(data.getStr("albumname"));
+            musicMeta.setSongId(songId);
             return musicMeta;
         }
         return null;

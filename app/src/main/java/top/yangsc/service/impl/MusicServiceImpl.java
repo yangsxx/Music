@@ -5,6 +5,7 @@ import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import top.yangsc.base.mapper.MusicMetaMapper;
 import top.yangsc.base.mapper.ObjectFileUrlMapper;
@@ -48,7 +49,8 @@ public class MusicServiceImpl implements MusicService {
 
         // 缓存不存在，插歌曲名+歌手名+时长做md5，查询数据库
         MusicMeta musicMeta = getMusicMeta(source, songId);
-        if (musicMeta == null) {
+
+        if (musicMeta != null) {
             ObjectFileUrl songUrlByLxNoMeta = getSongUrlByLxNoMeta(requesrUrl);
             return RespVO.BuilderSuccess(songUrlByLxNoMeta.getFileLink(), quality, songUrlByLxNoMeta.getQualify());
         }
@@ -197,30 +199,57 @@ public class MusicServiceImpl implements MusicService {
     }
 
     public void repairData() {
+
+        //修复没有匹配信息的歌曲
         byte[] bytes = "0000000000".getBytes();
 
         List<ObjectFileUrl> objectFileUrls = objectFileUrlMapper.selectList(new LambdaQueryWrapper<ObjectFileUrl>()
                 .eq(ObjectFileUrl::getSongMetaHash, bytes)
                 .eq(ObjectFileUrl::getAbandon, false));
 
-        if (objectFileUrls.isEmpty()){
-            return;
-        }
+        if (!objectFileUrls.isEmpty()){
+            for (ObjectFileUrl objectFileUrl : objectFileUrls) {
+                String originLink = objectFileUrl.getOriginLink();
+                String[] split = originLink.split("/");
+                if ("kg".equals(split[1])) {
+                    MusicMeta info = KgParse.getInfo(split[2]);
+                    byte[] bytes1 = buildMd5(info);
+                    // 更新md5
+                    objectFileUrl.setSongMetaHash(bytes1);
+                    objectFileUrlMapper.updateById(objectFileUrl);
 
-        for (ObjectFileUrl objectFileUrl : objectFileUrls) {
-            String originLink = objectFileUrl.getOriginLink();
-            String[] split = originLink.split("/");
-            if ("kg".equals(split[1])) {
-                MusicMeta info = KgParse.getInfo(split[2]);
-                byte[] bytes1 = buildMd5(info);
-                // 更新md5
-                objectFileUrl.setSongMetaHash(bytes1);
-                objectFileUrlMapper.updateById(objectFileUrl);
+                    info.setMetaHash(bytes1);
+                    musicMetaMapper.insert(info);
+                }
 
-                info.setMetaHash(bytes1);
-                musicMetaMapper.insert(info);
             }
-
         }
+
+
+
+        //修复图片获取失败的歌曲
+        List<MusicMeta> musicMetas = musicMetaMapper.selectList(new LambdaQueryWrapper<MusicMeta>());
+        for (MusicMeta musicMeta : musicMetas) {
+
+            List<ObjectFileUrl> objectFileUrl = objectFileUrlMapper.selectList(new LambdaQueryWrapper<ObjectFileUrl>()
+                    .eq(ObjectFileUrl::getSongMetaHash, musicMeta.getMetaHash()));
+
+            String s = objectFileUrl.getFirst().getOriginLink().split("/")[2];
+            String s1 = objectFileUrl.getFirst().getOriginLink().split("/")[1];
+            musicMeta.setSongId(s);
+            if (StringUtils.isBlank(musicMeta.getPicUrl())){
+               if ("kg".equals(s1)){
+                   musicMeta.setPicUrl(KgParse.getInfo(s).getPicUrl());
+               }
+               if ("wy".equals(s1)){
+                   musicMeta.setPicUrl(WyParse.getInfo(s).getPicUrl());
+               }
+               if ("kw".equals(s1)){
+                   musicMeta.setPicUrl(KwParse.getInfo(s).getPicUrl());
+               }
+           }
+            musicMetaMapper.updateById(musicMeta);
+        }
+
     }
 }
