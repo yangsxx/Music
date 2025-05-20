@@ -228,7 +228,8 @@ public class MusicServiceImpl implements MusicService {
 
 
         //修复图片获取失败的歌曲
-        List<MusicMeta> musicMetas = musicMetaMapper.selectList(new LambdaQueryWrapper<MusicMeta>());
+        List<MusicMeta> musicMetas = musicMetaMapper.selectList(new LambdaQueryWrapper<MusicMeta>()
+               .eq(MusicMeta::getSongId, null));
         for (MusicMeta musicMeta : musicMetas) {
 
             List<ObjectFileUrl> objectFileUrl = objectFileUrlMapper.selectList(new LambdaQueryWrapper<ObjectFileUrl>()

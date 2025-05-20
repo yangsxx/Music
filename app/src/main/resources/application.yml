@@ -77,6 +77,7 @@ management:
 # secret key:4k07XzIZvTf7vhzquJHUnsFlXDggagevnzq37Vys
 minio:
   endpoint: http://ip.yangsc.top:9000
+  endpointOutside: http://ip.yangsc.top:9000
   accessKey: R15YzGNpttAoHYFFLSrV
   secretKey: 4k07XzIZvTf7vhzquJHUnsFlXDggagevnzq37Vys
   bucketName: music

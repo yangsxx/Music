@@ -23,6 +23,9 @@ public class UploadUtil {
     @Value("${minio.endpoint}")
     private String endpoint;
 
+    @Value("${minio.endpointOutside}")
+    private String endpointOutside;
+
     @Value("${minio.accessKey}")
     private String accessKey;
 
@@ -66,7 +69,7 @@ public class UploadUtil {
                             .build());
 
             // 返回文件访问URL
-            return endpoint + "/" + bucketName + "/" + objectName;
+            return endpointOutside + "/" + bucketName + "/" + objectName;
 
         } catch (Exception e) {
             throw new RuntimeException("上传文件失败: " + e.getMessage());
