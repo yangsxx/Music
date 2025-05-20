@@ -4,7 +4,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://ip.yangsc.top:5432/swiftcache
+    url: jdbc:postgresql://ip.yangsc.top:5432/music
     username: postgres
     password: 1999826
     driver-class-name: org.postgresql.Driver
@@ -72,3 +72,12 @@ management:
   info:
     git:
       mode: full
+
+# access key:R15YzGNpttAoHYFFLSrV
+# secret key:4k07XzIZvTf7vhzquJHUnsFlXDggagevnzq37Vys
+minio:
+  endpoint: http://ip.yangsc.top:9000
+  accessKey: R15YzGNpttAoHYFFLSrV
+  secretKey: 4k07XzIZvTf7vhzquJHUnsFlXDggagevnzq37Vys
+  bucketName: music
+

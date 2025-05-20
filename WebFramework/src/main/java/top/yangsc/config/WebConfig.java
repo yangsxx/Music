@@ -16,7 +16,8 @@ public class WebConfig implements WebMvcConfigurer {
             "/demo/**",
             "/link/**",
             "/word.dic",
-            "/common/**"};
+            "/common/**",
+            "/lxmusicv3/url/**",};
 
 
 
