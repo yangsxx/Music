@@ -50,7 +50,7 @@ public class MusicServiceImpl implements MusicService {
         // 缓存不存在，插歌曲名+歌手名+时长做md5，查询数据库
         MusicMeta musicMeta = getMusicMeta(source, songId);
 
-        if (musicMeta != null) {
+        if (musicMeta == null) {
             ObjectFileUrl songUrlByLxNoMeta = getSongUrlByLxNoMeta(requesrUrl);
             return RespVO.BuilderSuccess(songUrlByLxNoMeta.getFileLink(), quality, songUrlByLxNoMeta.getQualify());
         }
@@ -218,6 +218,15 @@ public class MusicServiceImpl implements MusicService {
                     objectFileUrl.setSongMetaHash(bytes1);
                     objectFileUrlMapper.updateById(objectFileUrl);
 
+                    info.setMetaHash(bytes1);
+                    musicMetaMapper.insert(info);
+                }
+                if ("kw".equals(split[1])) {
+                    MusicMeta info = KwParse.getInfo(split[2]);
+                    byte[] bytes1 = buildMd5(info);
+                    // 更新md5
+                    objectFileUrl.setSongMetaHash(bytes1);
+                    objectFileUrlMapper.updateById(objectFileUrl);
                     info.setMetaHash(bytes1);
                     musicMetaMapper.insert(info);
                 }
