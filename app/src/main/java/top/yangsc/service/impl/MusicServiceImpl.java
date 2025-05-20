@@ -47,8 +47,20 @@ public class MusicServiceImpl implements MusicService {
             return RespVO.BuilderSuccess(objectFileUrls.get(0).getFileLink(), quality, objectFileUrls.get(0).getQualify());
         }
 
+        //检查是否有元数据
+        MusicMeta musicMeta = new MusicMeta();
+        List<MusicMeta> musicMetas = musicMetaMapper.selectList(new LambdaQueryWrapper<MusicMeta>()
+                .eq(MusicMeta::getSongId, songId)
+                .eq(MusicMeta::getPlatform, getPlatform(source)));
+
+        if (!musicMetas.isEmpty()){
+            musicMeta = musicMetas.getFirst();
+        }
+        else {
+            musicMeta = getMusicMeta(source, songId);
+        }
+
         // 缓存不存在，插歌曲名+歌手名+时长做md5，查询数据库
-        MusicMeta musicMeta = getMusicMeta(source, songId);
 
         if (musicMeta == null) {
             ObjectFileUrl songUrlByLxNoMeta = getSongUrlByLxNoMeta(requesrUrl);
@@ -81,6 +93,20 @@ public class MusicServiceImpl implements MusicService {
             return RespVO.BuilderSuccess(songUrlByLx.getFileLink(), quality);
         }
 
+    }
+    private int getPlatform(String source) {
+        switch (source) {
+            case "kw":
+                return 1;
+            case "kg":
+                return 2;
+            case "tx":
+                return 3;
+            case "wy":
+                return 4;
+            default:
+                return 0;
+        }
     }
 
     @Override
