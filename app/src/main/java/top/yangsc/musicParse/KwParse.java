@@ -25,6 +25,9 @@ public class KwParse {
 
     private static final String SCRIPT_URL = "https://www.kuwo.cn/play_detail/";
 
+    public static void main(String[] args) {
+        getInfo("284892811");
+    }
     public static MusicMeta getInfo(String songId) {
 
         HttpRequest get = HttpUtil.createGet(SCRIPT_URL + songId);
@@ -32,6 +35,8 @@ public class KwParse {
         Document doc = Jsoup.parse(s);
         Elements scripts = doc.getElementsByTag("script");
         String scriptContent = "";
+        Element elementById = doc.getElementById("songinfo-name");
+        String songName = elementById.attr("value");
 
         for (Element script : scripts) {
             String content = script.html();
@@ -47,7 +52,7 @@ public class KwParse {
         }
         JSONObject entries = JSONUtil.parseObj(songinfos[0]);
         MusicMeta musicMeta = new MusicMeta();
-        musicMeta.setSongName(entries.getStr("name"));
+        musicMeta.setSongName(songName);
         musicMeta.setSingerName(entries.getStr("artist"));
         musicMeta.setDuration(entries.getInt("duration"));
         musicMeta.setDescribe(entries.getStr("albuminfo"));
