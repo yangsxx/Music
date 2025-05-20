@@ -56,6 +56,7 @@ public class KwParse {
         musicMeta.setSingerName(entries.getStr("artist"));
         musicMeta.setDuration(entries.getInt("duration"));
         musicMeta.setDescribe(entries.getStr("albuminfo"));
+        musicMeta.setPicUrl(entries.getStr("pic120"));
         musicMeta.setPlatform(1);
 
         return musicMeta;
