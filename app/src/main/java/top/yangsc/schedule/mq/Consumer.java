@@ -2,10 +2,14 @@ package top.yangsc.schedule.mq;
 
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 import top.yangsc.base.mapper.ObjectFileUrlMapper;
+import top.yangsc.base.mapper.SongCountMapper;
 import top.yangsc.base.pojo.ObjectFileUrl;
+import top.yangsc.base.pojo.SongCount;
 import top.yangsc.tools.UploadUtil;
 
 import javax.annotation.Resource;
@@ -13,6 +17,7 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 @Component
 public class Consumer {
@@ -21,6 +26,9 @@ public class Consumer {
 
     @Resource
     private ObjectFileUrlMapper objectFileUrlMapper;
+
+    @Resource
+    private SongCountMapper songCountMapper;
 
     @RabbitListener(queues = "downloadTask.queue")
     public void receiveMessage(String message) {
@@ -48,6 +56,25 @@ public class Consumer {
             objectFileUrlMapper.insert(entries);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @RabbitListener(queues = "countTask.queue")
+    public void countMessage(String message) {
+        if (!StringUtils.isBlank(message)){
+            List<SongCount> songCounts = songCountMapper.selectList(new LambdaQueryWrapper<SongCount>()
+                    .eq(SongCount::getSongId, message));
+            if (songCounts.size()==0){
+                SongCount songCount = new SongCount();
+                songCount.setSongId(message);
+                songCount.setCount(1);
+                songCountMapper.insert(songCount);
+            }
+            else {
+                SongCount songCount = songCounts.get(0);
+                songCount.setCount(songCount.getCount()+1);
+                songCountMapper.updateById(songCount);
+            }
         }
     }
 }

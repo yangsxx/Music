@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class Producer {
     private static final String QUEUE_NAME = "downloadTask.queue";
+
+    private static final String Count_TASK = "countTask.queue";
     
     private final RabbitTemplate rabbitTemplate;
     
@@ -15,6 +17,10 @@ public class Producer {
 
     public void DownloadTaskProducer(String message) {
         rabbitTemplate.convertAndSend(QUEUE_NAME, message);
+    }
+
+    public void CountTaskProducer(String message) {
+        rabbitTemplate.convertAndSend(Count_TASK, message);
     }
 
 }

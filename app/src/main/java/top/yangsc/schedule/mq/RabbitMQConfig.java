@@ -11,4 +11,8 @@ public class RabbitMQConfig {
     public Queue aiClipboardQueue() {
         return new Queue("downloadTask.queue");
     }
+    @Bean
+    public Queue countQueue() {
+        return new Queue("countTask.queue");
+    }
 }

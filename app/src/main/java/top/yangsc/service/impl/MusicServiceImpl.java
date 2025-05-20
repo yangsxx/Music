@@ -37,6 +37,7 @@ public class MusicServiceImpl implements MusicService {
 
     @Override
     public RespVO queryWithQualify(String source, String songId, String quality) {
+        producer.CountTaskProducer(songId);
         String requesrUrl = "/" + source + "/" + songId + "/" + quality;
 
         // 先查询缓存
