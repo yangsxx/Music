@@ -1,7 +1,9 @@
 package top.yangsc.controller.bean;
 
 import lombok.Data;
+import top.yangsc.tools.TimestampUtil;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,7 +26,7 @@ public class ExtraVo {
         q.put("result", res);
 
         Map<String,Object> e = new HashMap<>();
-        e.put("time", System.currentTimeMillis());
+        e.put("time",  TimestampUtil.currentAsString());
         e.put("expire", true);
 
         extraVo.setCache(false);
