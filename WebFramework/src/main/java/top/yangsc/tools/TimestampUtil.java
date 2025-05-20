@@ -11,6 +11,8 @@ public class TimestampUtil {
     private static final DateTimeFormatter DEFAULT_FORMATTER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
+    private static final DateTimeFormatter DEFAULT_Mon =
+            DateTimeFormatter.ofPattern("yyyy-MM");
     /**
      * 将时间戳转换为默认格式的字符串 (yyyy-MM-dd HH:mm:ss)
      * @param timestamp 毫秒时间戳
@@ -18,6 +20,10 @@ public class TimestampUtil {
      */
     public static String format(long timestamp) {
         return format(timestamp, DEFAULT_FORMATTER);
+    }
+
+    public static String formatMon(long timestamp) {
+        return format(timestamp, DEFAULT_Mon);
     }
 
     public static String format(Timestamp timestamp) {

@@ -41,6 +41,9 @@ public class UploadUtil {
     public String uploadFile( InputStream inputStream, String contentType ,Long fileSize,  String fileType) {
         try {
             String  objectName = UUID.randomUUID().toString()+"."+fileType;
+            String format = TimestampUtil.formatMon(TimestampUtil.current());
+
+            String pathName = format+"/"+objectName;
             // 创建MinIO客户端
             MinioClient minioClient = MinioClient.builder()
                     .endpoint(endpoint)
@@ -57,7 +60,7 @@ public class UploadUtil {
             minioClient.putObject(
                     PutObjectArgs.builder()
                             .bucket(bucketName)
-                            .object(objectName)
+                            .object(pathName)
                             .stream(inputStream, fileSize, -1)
                             .contentType(contentType)
                             .build());

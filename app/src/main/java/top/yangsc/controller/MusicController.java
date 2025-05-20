@@ -44,4 +44,10 @@ public class MusicController {
     public String common() {
         return musicService.common();
     }
+
+    @GetMapping("/repairData")
+    public String repairData() {
+        musicService.repairData();
+        return "success";
+    }
 }

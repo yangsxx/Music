@@ -8,4 +8,5 @@ public interface MusicService {
     String type(String type);
     String script(String key, String checkUpdate);
     String common();
+    public void repairData();
 }
