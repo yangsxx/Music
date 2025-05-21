@@ -3,6 +3,7 @@ package top.yangsc.interceptor;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.HandlerInterceptor;
+import top.yangsc.base.Exception.PermissionException;
 import top.yangsc.base.field.RedisPreFix;
 import top.yangsc.base.pojo.Users;
 import top.yangsc.config.ThreadLocalTools.CurrentContext;
@@ -21,7 +22,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             return true;
         }
         System.out.println("已拦截请求："+ request.getRequestURI());
-        return false;
+        throw  new PermissionException("请先登录");
     }
 
     private void setCurrentUser(String token){

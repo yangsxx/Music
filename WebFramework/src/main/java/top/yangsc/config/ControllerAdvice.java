@@ -24,28 +24,21 @@ public class ControllerAdvice {
     }
     @ExceptionHandler(PermissionException.class)
     public ResultData<String> PermissionCatcher(PermissionException exception){
-        exception.fillInStackTrace();
-        exception.printStackTrace();
         return ResultData.Exception(HttpCode.FORBIDDEN_CODE,StringUtils.isEmpty(exception.getMessage())?"系统繁忙中，请稍后再试":"权限异常："+exception.getMessage());
-
     }
     @ExceptionHandler(SQLException.class)
     public ResultData<String> SqlExceptionCatcher(SQLException exception){
-        exception.fillInStackTrace();
         exception.printStackTrace();
         return ResultData.error("数据库异常，请联系管理员处理");
     }
 
-
     @ExceptionHandler(RuntimeException.class)
     public ResultData<String> runtimeExceptionCatcher(RuntimeException exception){
-        exception.fillInStackTrace();
         exception.printStackTrace();
         return ResultData.error(StringUtils.isEmpty(exception.getMessage())?"系统繁忙中，请稍后再试":exception.getMessage());
     }
     @ExceptionHandler(Exception.class)
     public ResultData<String> exceptionCatcher(Exception exception){
-        exception.fillInStackTrace();
         exception.printStackTrace();
         return ResultData.error(StringUtils.isEmpty(exception.getMessage())?"系统繁忙中，请稍后再试":exception.getMessage());
     }
