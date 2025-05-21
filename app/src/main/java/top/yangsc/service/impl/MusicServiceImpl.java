@@ -246,25 +246,28 @@ public class MusicServiceImpl implements MusicService {
             for (ObjectFileUrl objectFileUrl : objectFileUrls) {
                 String originLink = objectFileUrl.getOriginLink();
                 String[] split = originLink.split("/");
+                MusicMeta info = null;
                 if ("kg".equals(split[1])) {
-                    MusicMeta info = KgParse.getInfo(split[2]);
-                    byte[] bytes1 = buildMd5(info);
-                    // 更新md5
-                    objectFileUrl.setSongMetaHash(bytes1);
-                    objectFileUrlMapper.updateById(objectFileUrl);
-
-                    info.setMetaHash(bytes1);
-                    musicMetaMapper.insert(info);
+                     info= KgParse.getInfo(split[2]);
                 }
                 if ("kw".equals(split[1])) {
-                    MusicMeta info = KwParse.getInfo(split[2]);
-                    byte[] bytes1 = buildMd5(info);
-                    // 更新md5
-                    objectFileUrl.setSongMetaHash(bytes1);
-                    objectFileUrlMapper.updateById(objectFileUrl);
-                    info.setMetaHash(bytes1);
-                    musicMetaMapper.insert(info);
+                     info = KwParse.getInfo(split[2]);
                 }
+                if ("wy".equals(split[1])) {
+                    info = WyParse.getInfo(split[2]);
+                }
+                if ("tx".equals(split[1])) {
+                    info = TxParse.getInfo(split[2]);
+                }
+                if (info == null || info.isEmpty()){
+                    continue;
+                }
+                byte[] bytes1 = buildMd5(info);
+                // 更新md5
+                objectFileUrl.setSongMetaHash(bytes1);
+                objectFileUrlMapper.updateById(objectFileUrl);
+                info.setMetaHash(bytes1);
+                musicMetaMapper.insert(info);
 
             }
         }
