@@ -7,6 +7,7 @@ import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import top.yangsc.base.mapper.MusicMetaMapper;
 import top.yangsc.base.mapper.ObjectFileUrlMapper;
 import top.yangsc.base.pojo.MusicMeta;
@@ -36,6 +37,7 @@ public class MusicServiceImpl implements MusicService {
     private Producer producer;
 
     @Override
+    @Transactional
     public RespVO queryWithQualify(String source, String songId, String quality) {
         producer.CountTaskProducer(songId);
         String requesrUrl = "/" + source + "/" + songId + "/" + quality;
