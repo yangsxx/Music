@@ -75,4 +75,20 @@ public class UploadUtil {
             throw new RuntimeException("上传文件失败: " + e.getMessage());
         }
     }
+
+    public static void main(String[] args) {
+        long l = System.currentTimeMillis();
+        Long sum = sum(100000000);
+        long l1 = System.currentTimeMillis();
+        System.out.println("sum = " + sum);
+        System.out.println("l1 - l = " + (l1 - l));
+    }
+
+    public static Long sum(int a){
+        Long sum = 0L;
+        for (int l = 0; l < a; l++) {
+            sum  += l;
+        }
+        return sum;
+    }
 }

@@ -50,4 +50,8 @@ public class MusicMeta implements Serializable {
 
     @Schema(description = "歌曲id")
     private String songId;
+
+    public boolean isEmpty() {
+        return songName == null || songName.isEmpty() || singerName == null || singerName.isEmpty();
+    }
 }

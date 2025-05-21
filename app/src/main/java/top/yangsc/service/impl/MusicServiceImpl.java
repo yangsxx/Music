@@ -70,7 +70,7 @@ public class MusicServiceImpl implements MusicService {
 
         // 缓存不存在，插歌曲名+歌手名+时长做md5，查询数据库
 
-        if (musicMeta == null) {
+        if (musicMeta.isEmpty()) {
             ObjectFileUrl songUrlByLxNoMeta = getSongUrlByLxNoMeta(requesrUrl);
             return RespVO.BuilderSuccess(songUrlByLxNoMeta.getFileLink(), quality, songUrlByLxNoMeta.getQualify());
         }
@@ -78,7 +78,8 @@ public class MusicServiceImpl implements MusicService {
         musicMeta.setMetaHash(md5);
         List<ObjectFileUrl> objectFileUrlList = objectFileUrlMapper.selectList(new LambdaQueryWrapper<ObjectFileUrl>()
                 .eq(ObjectFileUrl::getSongMetaHash, md5)
-                .eq(ObjectFileUrl::getAbandon, false));
+                .eq(ObjectFileUrl::getAbandon, false)
+                .ne(ObjectFileUrl::getSongMetaHash,"0000000000".getBytes()));
         // 如果存在
         if (!objectFileUrlList.isEmpty()) {
             //  返回指定音质的链接

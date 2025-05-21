@@ -24,7 +24,7 @@ public class WyParse {
     private static final String URL = "https://music.163.com/song?id=";
 
     public static MusicMeta getInfo(String songId) {
-        HttpRequest get = HttpUtil.createGet(URL);
+        HttpRequest get = HttpUtil.createGet(URL+songId);
         String s = get.addHeaders(getHeaders()).execute().body();
         Document doc = Jsoup.parse(s);
         Element jsons = doc.select("script[type=application/ld+json]").first();
