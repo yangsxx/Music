@@ -69,7 +69,7 @@ public class UploadUtil {
                             .build());
 
             // 返回文件访问URL
-            return endpointOutside + "/" + bucketName + "/" + objectName;
+            return endpointOutside + "/" + bucketName + "/" + pathName;
 
         } catch (Exception e) {
             throw new RuntimeException("上传文件失败: " + e.getMessage());

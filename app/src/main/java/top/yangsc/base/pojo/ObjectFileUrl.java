@@ -44,4 +44,7 @@ public class ObjectFileUrl implements Serializable {
 
     @Schema(description = "歌曲质量")
     private String qualify;
+
+    @Schema(description = "是否已校验")
+    private Boolean checked;
 }

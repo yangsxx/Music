@@ -49,7 +49,7 @@ public class Consumer {
 
             String minioUrl="";
             // 使用缓冲区下载文件
-            try (InputStream inputStream = new BufferedInputStream(connection.getInputStream(), 8192)) {
+            try (InputStream inputStream = new BufferedInputStream(connection.getInputStream(), 128*1024)) {
                  minioUrl = uploadUtil.uploadFile(inputStream, contentType ,fileSize,split[split.length-1]);
             }
             entries.setFileLink(minioUrl);

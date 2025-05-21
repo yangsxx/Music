@@ -18,6 +18,8 @@ import top.yangsc.musicParse.KgParse;
 import top.yangsc.musicParse.KwParse;
 import top.yangsc.musicParse.TxParse;
 import top.yangsc.musicParse.WyParse;
+import top.yangsc.schedule.CountTask;
+import top.yangsc.schedule.mq.Consumer;
 import top.yangsc.schedule.mq.Producer;
 import top.yangsc.service.MusicService;
 
@@ -35,6 +37,9 @@ public class MusicServiceImpl implements MusicService {
 
     @Resource
     private Producer producer;
+
+    @Resource
+    private CountTask task;
 
     @Override
     @Transactional
@@ -289,6 +294,9 @@ public class MusicServiceImpl implements MusicService {
            }
             musicMetaMapper.updateById(musicMeta);
         }
+
+        //检查链接可达
+        task.check();
 
     }
 }
